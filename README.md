@@ -3,6 +3,7 @@
 
 ## 개요
 - 최근 여러 LLM 모델이 나오면서 기업, 사용자가 적절한 LLM의 사용을 원함.
+- 사용자들이 어느 모델이 어느 분야의 대답을 잘 하는지 명확하지 않은 상태로 서비스를 이용함.
 - SBERT → SAE latent (sparse semantic state)
 - Q-network 라우팅 (contextual bandit, RouterBench correctness reward 학습)
 - 데모 출력: 상위 SAE feature, 모델별 Q-value, 선택 근거
@@ -11,7 +12,17 @@
 - 팀원: router (20231851/ 이도현)
 - GitHub: https://github.com/ldh-at/LLM_router
 
+
 ## 설치
+0) 저장소 클론
+```
+git clone https://github.com/ldh-at/LLM_router.git
+cd LLM_router
+
+mkdir -p ckpts_semantic_search data
+
+```
+
 1) Conda 환경 생성/활성화
 ```
 conda create -n llmrouter python=3.10 -y
@@ -26,7 +37,7 @@ CUDA별 torch가 필요하면 예시:
 pip install torch --index-url https://download.pytorch.org/whl/cu121
 ```
 
-## 아티팩트 다운로드 및 배치
+## 아티팩트 다운로드 및 배치(정확히 보고 배치)
 - SAE 가중치: `./sae_model.pt`
 - 라우터 체크포인트(semantic): `./ckpts_semantic_search/router_qnet_semantic_best_overall.pt`
 - RouterBench 데이터: `./data/routerbench_0shot.pkl`
@@ -64,13 +75,6 @@ LLM_router/
 └── README.md
 ```
 
-## 실험 결과 예시 (semantic reward)
-| Config | Top-1 | Top-3 | Top-5 | Avg Cost |
-|--------|-------|-------|-------|----------|
-| 0      | 0.8223| 0.8908| 0.9118| 0.002668 |
-| 1      | 0.8223| 0.8918| 0.9106| 0.002641 |
-| 2      | 0.8213| 0.8929| 0.9134| 0.002706 |
-| 3      | 0.8210| 0.8920| 0.9135| 0.002650 |
 
 ## 체크리스트
 - conda env 생성 및 활성화
