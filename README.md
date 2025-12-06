@@ -37,7 +37,7 @@ CUDA별 torch가 필요하면 예시:
 pip install torch --index-url https://download.pytorch.org/whl/cu121
 ```
 
-## 아티팩트 다운로드 및 배치(정확히 보고 배치/ 디렉토리 없으면 mkdir로 추가해서 만들기)
+## 아티팩트 다운로드 및 배치
 - SAE 가중치: `./sae_model.pt`
 - 라우터 체크포인트(semantic): `./ckpts_semantic_search/router_qnet_semantic_best_overall.pt`
 - RouterBench 데이터: `./data/routerbench_0shot.pkl`
@@ -47,33 +47,37 @@ pip install torch --index-url https://download.pytorch.org/whl/cu121
 - routerbench_0shot:'https://huggingface.co/datasets/withmartian/routerbench/tree/main'
 - best_router : 'https://github.com/ldh-at/LLM_router/releases/download/v1.0/router_qnet_semantic_best_overall.pt'
 - SAE : 'https://github.com/ldh-at/LLM_router/releases/download/v1.0/sae_model.pt'
-- SAE feature : 'https://github.com/ldh-at/LLM_router/releases/download/v1.0/sae_feature_task_stats.csv'
+
+## 프로젝트 구조(위의 파일들 정확히 보고 배치/ 디렉토리 없으면 mkdir로 추가해서 만들기)
+```
+LLM_router/
+├── debug/
+│   └── debug_router_inference.py
+├── ckpts_semantic_search/router_qnet_semantic_best_overall.pt (릴리스에서 다운로드)
+├── data/routerbench_0shot.pkl (릴리스에서 다운로드)
+├── sae_model.pt (릴리스에서 다운로드)
+├── sae_feature_task_stats.csv 
+├── requirements.txt
+└── README.md
+```
+
 
 ## 실행 예시
-- 프롬프트 모드(실제 프롬프트를 입력하면 라우터가 모델을 골라줌)
-```
-python -m debug.debug_router_inference --mode prompt --prompt "여기에 프롬프트" 
-
-```
 - 데이터셋 모드(라우터 벤치 val 데이터에서 index로 프롬프트를 고름)
 ```
 python -m debug.debug_router_inference --mode dataset --idx 350 
 
 ```
+
+- 프롬프트 모드(실제 프롬프트를 입력하면 라우터가 모델을 골라줌)
+```
+python -m debug.debug_router_inference --mode prompt --prompt "*your prompt*" 
+
+```
+
 - 주요 옵션: `--prompt`, `--idx`, `--split`, `--k_show`, `--ckpt`
 
-## 프로젝트 구조
-```
-LLM_router/
-├── debug/
-│   └── debug_router_inference.py
-├── ckpts_semantic_search/        # router_qnet_semantic_best_overall.pt (릴리스에서 다운로드)
-├── data/                         # routerbench_0shot.pkl (릴리스에서 다운로드)
-├── sae_model.pt (릴리스에서 다운로드)
-├── sae_feature_task_stats.csv (릴리스에서 다운로드)
-├── requirements.txt
-└── README.md
-```
+
 
 
 ## 체크리스트
