@@ -1,0 +1,10 @@
+cluster,n_samples,router_acc,oracle_top3,router_top3
+hellaswag,1004,0.012948207171314742,"zero-one-ai/Yi-34B-Chat(0.33), mistralai/mistral-7b-chat(0.27), WizardLM/WizardLM-13B-V1.2(0.14)",gpt-4-1106-preview(1.00)
+grade-school-math,779,0.010269576379974325,"mistralai/mistral-7b-chat(0.28), WizardLM/WizardLM-13B-V1.2(0.26), mistralai/mixtral-8x7b-chat(0.16)",gpt-4-1106-preview(1.00)
+unknown,168,0.041666666666666664,"mistralai/mistral-7b-chat(0.38), WizardLM/WizardLM-13B-V1.2(0.21), zero-one-ai/Yi-34B-Chat(0.13)",gpt-4-1106-preview(1.00)
+mmlu-moral-scenarios,34,0.058823529411764705,"mistralai/mixtral-8x7b-chat(0.35), gpt-3.5-turbo-1106(0.18), WizardLM/WizardLM-13B-V1.2(0.15)",gpt-4-1106-preview(1.00)
+abstract2title,9,0.0,mistralai/mistral-7b-chat(1.00),gpt-4-1106-preview(1.00)
+chinese_zodiac,2,0.0,gpt-3.5-turbo-1106(1.00),gpt-4-1106-preview(1.00)
+winogrande,2,0.0,"mistralai/mistral-7b-chat(0.50), zero-one-ai/Yi-34B-Chat(0.50)",gpt-4-1106-preview(1.00)
+consensus_summary,1,0.0,mistralai/mistral-7b-chat(1.00),gpt-4-1106-preview(1.00)
+mmlu-professional-law,1,0.0,WizardLM/WizardLM-13B-V1.2(1.00),gpt-4-1106-preview(1.00)

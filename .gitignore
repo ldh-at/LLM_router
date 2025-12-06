@@ -1,0 +1,31 @@
+# Python cache/venv
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.dist-info/
+.venv/
+venv/
+env/
+.env
+
+# IDE/editor
+.vscode/
+.idea/
+.DS_Store
+
+# Logs/temp
+*.log
+*.tmp
+*.bak
+
+# Checkpoints & large artifacts
+ckpts/
+ckpts_semantic_search/
+data/
+*.pt
+*.pth
+*.pkl
+*.ckpt
+
+# Notebook checkpoints
+.ipynb_checkpoints/
