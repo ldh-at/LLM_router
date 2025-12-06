@@ -1,4 +1,4 @@
-# LLM Router Debug & Demo
+# LLM Router Demo
 
 ## 프로젝트 개요
 - SAE + SBERT 기반 latent를 사용해 다중 모델 라우팅을 수행하는 contextual bandit 데모/디버그 스크립트.
@@ -6,7 +6,7 @@
 - 데이터셋 모드: RouterBench 샘플 기준으로 라우터의 선택과 모델별 답변 스니펫, 상위 Q-value를 비교.
 
 ## 팀 정보
-- 팀원: (학번/이름 기입)
+- 팀원: router (20231851/ 이도현)
 - GitHub 페이지: https://github.com/ldh-at/LLM_router
 
 ## 필요한 아티팩트(다운로드 후 경로에 배치)
