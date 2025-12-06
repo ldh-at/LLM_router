@@ -1,51 +1,91 @@
 # LLM Router Demo
+SAE 기반 의미 피처 + contextual bandit 라우터로 프롬프트마다 최적 LLM을 선택하는 시스템입니다.
 
-## 프로젝트 개요
-- SAE + SBERT 기반 latent를 사용해 다중 모델 라우팅을 수행하는 contextual bandit 데모/디버그 스크립트.
-- 프롬프트 모드: 임의 프롬프트에 대해 라우터가 선택한 모델/SAE 피처 상위값을 출력.
-- 데이터셋 모드: RouterBench 샘플 기준으로 라우터의 선택과 모델별 답변 스니펫, 상위 Q-value를 비교.
+## 개요
+- SBERT → SAE latent (sparse semantic state)
+- Q-network 라우팅 (contextual bandit, RouterBench correctness reward 학습)
+- 디버그 출력: 상위 SAE feature, 모델별 Q-value, 선택 근거
 
 ## 팀 정보
 - 팀원: router (20231851/ 이도현)
-- GitHub 페이지: https://github.com/ldh-at/LLM_router
+- GitHub: https://github.com/ldh-at/LLM_router
 
-## 필요한 아티팩트(다운로드 후 경로에 배치)
-- SAE 가중치: `sae_model.pt` → `./sae_model.pt`  
-- 라우터 체크포인트(semantic): `router_qnet_semantic_best_overall.pt` → `./ckpts_semantic_search/router_qnet_semantic_best_overall.pt`  
-- 라우터 체크포인트(legacy 대안): `router_qnet_checkpoint.pt` → `./ckpts/router_qnet_checkpoint.pt`  
-- RouterBench 데이터: `routerbench_0shot.pkl` → `./data/routerbench_0shot.pkl`  
-- SAE feature 통계: `sae_feature_task_stats.csv` → `./sae_feature_task_stats.csv`
-- 위 파일들은 용량이 크면 Git LFS 또는 릴리스/외부 링크에 올리고, README에 실제 다운로드 링크를 채워 넣으세요.
+## 설치
+1) Conda 환경 생성/활성화
+```
+conda create -n llmrouter python=3.10 -y
+conda activate llmrouter
+```
+2) 의존성 설치
+```
+pip install -r requirements.txt
+```
+CUDA별 torch가 필요하면 예시:
+```
+pip install torch --index-url https://download.pytorch.org/whl/cu121
+```
 
-## 환경 준비
-- Python 3.10+ 권장.
-- 패키지 설치: `pip install -r requirements.txt` (없다면 torch, pandas, sentence-transformers 등 의존성을 수동 설치)
-- GPU 사용: CUDA가 있으면 자동으로 `cuda`, 없으면 `cpu`로 동작.
+## 아티팩트 다운로드 및 배치
+- SAE 가중치: `./sae_model.pt`
+- 라우터 체크포인트(semantic): `./ckpts_semantic_search/router_qnet_semantic_best_overall.pt`
+- 라우터 체크포인트(legacy): `./ckpts/router_qnet_checkpoint.pt`
+- RouterBench 데이터: `./data/routerbench_0shot.pkl`
+- SAE feature 통계: `./sae_feature_task_stats.csv`
 
-## 실행 방법
-- 프롬프트 모드 예시:
-  ```bash
-  python debug/debug_router_inference.py --mode prompt --prompt "여기에 프롬프트" --k_show 20 --ckpt ckpts_semantic_search/router_qnet_semantic_best_overall.pt
-  ```
-- 데이터셋 모드 예시:
-  ```bash
-  python debug/debug_router_inference.py --mode dataset --idx 0 --split val --k_show 20 --ckpt ckpts_semantic_search/router_qnet_semantic_best_overall.pt
-  ```
-- 주요 옵션
-  - `--prompt`: 프롬프트 모드에서 사용할 텍스트
-  - `--idx`: 데이터셋 인덱스 (0 기반)
-  - `--split`: `val`/`train` 등 데이터 스플릿
-  - `--k_show`: 출력할 상위 SAE feature 개수
-  - `--ckpt`: 사용할 라우터 체크포인트 경로
+배포 권장:
+- GitHub Releases에 올리고 링크 기입  
+  예) `https://github.com/ldh-at/LLM_router/releases/download/<tag>/router_qnet_semantic_best_overall.pt`
+- 또는 Git LFS: `git lfs install` → `git lfs track "*.pt" "*.pkl"` → 커밋/푸시
+- 외부 스토리지 사용 시 공개 링크 여부 확인
 
-## 보고서(PPT)
-- 첫 슬라이드에 팀원 학번/이름 + GitHub 링크를 명시.
-- 내용: 주제, 설계, 구현, 실험 결과, 결론/한계/추가과제.
-- 완성된 PPT를 저장소에도 포함(예: `docs/report.pptx`)하고, 사이버캠퍼스에는 팀원 1명이 제출.
+## 실행 예시
+- 프롬프트 모드
+```
+python debug/debug_router_inference.py --mode prompt \
+  --prompt "여기에 프롬프트" \
+  --k_show 20 \
+  --ckpt ckpts_semantic_search/router_qnet_semantic_best_overall.pt
+```
+- 데이터셋 모드
+```
+python debug/debug_router_inference.py --mode dataset \
+  --idx 0 \
+  --split val \
+  --k_show 20 \
+  --ckpt ckpts_semantic_search/router_qnet_semantic_best_overall.pt
+```
+- 주요 옵션: `--prompt`, `--idx`, `--split`, `--k_show`, `--ckpt`
 
-## 제출/공유 체크리스트
-1) 필요한 `.pt`/`.pkl` 다운로드 후 지정 경로에 배치.
-2) `pip install -r requirements.txt`로 환경 준비.
-3) 위 실행 예시로 프롬프트 모드/데이터셋 모드 검증.
-4) README에 실제 다운로드 링크 채우기 + 보고서 파일 추가.
-5) `git add .` → `git commit -m "Add router demo"` → `git push -u origin main`.
+## 프로젝트 구조
+```
+LLM_router/
+├── debug/
+│   └── debug_router_inference.py
+├── ckpts_semantic_search/        # 라우터 체크포인트 (릴리스에서 다운로드)
+├── data/                         # routerbench_0shot.pkl
+├── sae_model.pt
+├── sae_feature_task_stats.csv
+├── requirements.txt
+└── README.md
+```
+
+## 실험 결과 예시 (semantic reward)
+| Config | Top-1 | Top-3 | Top-5 | Avg Cost |
+|--------|-------|-------|-------|----------|
+| 0      | 0.8223| 0.8908| 0.9118| 0.002668 |
+| 1      | 0.8223| 0.8918| 0.9106| 0.002641 |
+| 2      | 0.8213| 0.8929| 0.9134| 0.002706 |
+| 3      | 0.8210| 0.8920| 0.9135| 0.002650 |
+
+## 체크리스트
+- conda env 생성 및 활성화
+- `pip install -r requirements.txt`
+- Releases(LFS)에서 모델/데이터 다운로드 후 지정 경로 배치
+- prompt/dataset 모드로 실행 확인
+- README에 실제 다운로드 링크, 보고서 파일(PPT) 경로 추가
+
+## 트러블슈팅
+- CUDA 인식 안 될 때: CUDA 버전에 맞춰 torch 재설치  
+  `pip install torch --index-url https://download.pytorch.org/whl/cu121`
+- `dataset not found`: `data/routerbench_0shot.pkl` 경로 확인
+- `sentence_transformers` import 오류: `pip install -r requirements.txt` 다시 실행
